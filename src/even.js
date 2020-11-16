@@ -1,30 +1,30 @@
-import promptly from 'promptly'
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-plusplus */
+import promptly from 'promptly';
 
-const randomNumber0 = Math.floor(Math.random() * 100) + 1
-const randomNumber1 = Math.floor(Math.random() * 100) + 1
-const randomNumber2 = Math.floor(Math.random() * 100) + 1
+const numberRange = 100;
+const rounds = 3;
+const numbers = [];
 
-const numbers = [randomNumber0, randomNumber1, randomNumber2]
+const getRandomNumber = () => Math.floor(Math.random() * numberRange);
 
-const isEven = (randomNumber) => {
-    if (randomNumber % 2 === 0) {
-  return 'yes'
-  }
-  return 'no'
+for (let i = 0; i < rounds; i++) {
+  const randomNumber = getRandomNumber();
+  numbers.push(randomNumber);
 }
 
+const isEven = (randomNumber) => (randomNumber % 2 === 0 ? 'yes' : 'no');
+
 export default async () => {
-    const name = await promptly.prompt('May I have your name?')
-    console.log(`Hello, ${name}!`)
-    console.log('Answer "yes" if the number is even, otherwise answer "no"')
-    for (const item of numbers) {
-        let userAnswer = await promptly.prompt(`Question: ${item}`)
-        if (isEven(item) !== userAnswer) {
-            console.log(`${userAnswer} is wrong answer ;(. Correct answer was ${isEven(item)}. Let's try again, ${name}!`)  
-            break     
-        } else {
-            console.log('Correct!') 
-        }       
-     }  
-     console.log(`Congratulations, ${name}!`) 
-    } 
+  console.log('Welcome to the Brain Games!');
+  const name = await promptly.prompt('May I have your name?');
+  console.log(`Hello, ${name}!`);
+  console.log('Answer "yes" if the number is even, otherwise answer "no"');
+  for (const item of numbers) {
+    const userAnswer = await promptly.prompt(`Question: ${item}`);
+    if (isEven(item) !== userAnswer) {
+      return console.log(`${userAnswer} is wrong answer ;(. Correct answer was ${isEven(item)}. Let's try again, ${name}!`);
+    } console.log('Correct!');
+  }
+  console.log(`Congratulations, ${name}!`);
+};
