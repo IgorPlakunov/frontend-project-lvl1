@@ -20,14 +20,12 @@ export default async () => {
   const name = await promptly.prompt('May I have your name?');
   console.log(`Hello, ${name}!`);
   console.log('Answer "yes" if the number is even, otherwise answer "no"');
-  for (const item of numbers) {
+  numbers.forEach(async (item) => {
     console.log(`Question: ${item}`);
-    const userAnswer = await promptly.prompt('Your answer:');
+    await promptly.prompt('Your answer:');
     if (isEven(item) === userAnswer) {
       console.log('Correct!');
-    } else {
-      return console.log(`'${userAnswer}' is wrong answer ;(. Correct answer was '${isEven(item)}'. Let's try again, ${name}!`);
-    }
-  }
-  console.log(`Congratulations, ${name}!`);
+    } return console.log(`'${userAnswer}' is wrong answer ;(. Correct answer was '${isEven(item)}'. Let's try again, ${name}!`);
+  });
+  return console.log(`Congratulations, ${name}!`);
 };
