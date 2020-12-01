@@ -28,7 +28,7 @@ export default async () => {
       } else {
         return console.log(`'${userAnswer}' is wrong answer ;(. Correct answer was '${isEven(randomNumber)}'. Let's try again, ${name}!`);
       }
-      startRounds(currentRounds - 1);
+      return startRounds(currentRounds - 1);
     }
     startRounds(rounds);
   }
