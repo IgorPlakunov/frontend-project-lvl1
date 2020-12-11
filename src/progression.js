@@ -1,38 +1,44 @@
 import promptly from 'promptly';
 
 const rounds = 3;
-const operators = ['-', '+', '*'];
-
 const getRandomNumber = (start, end) => start + Math.floor((end - start) * Math.random());
 
-const getRandomOperator = () => operators[getRandomNumber(0, 2)];
+const randomNumber = getRandomNumber(1, 100);
+const randomProgressNumber = getRandomNumber(2, 10);
+const randomProgressionLength = getRandomNumber(5, 10);
 
-const getAnswers = (num1, oper, num2) => {
-  const operatorsList = {
-    '+': () => num1 + num2,
-    '-': () => num1 - num2,
-    '*': () => num1 * num2,
-  };
-  return operatorsList[oper]();
+const progression = [];
+
+const getProgression = (number) => {
+  if (progression.length === randomProgressionLength) {
+    return progression;
+  }
+  progression.push(number);
+  return getProgression(number + randomProgressNumber);
+};
+getProgression(randomNumber);
+
+const randomHiddenNumber = progression[getRandomNumber(0, progression.length)];
+
+const hideNumber = (array) => {
+  array.splice(array.indexOf(randomHiddenNumber), 1, '..');
+  return array.join(' ');
 };
 
 export default async function startGame() {
   console.log('Welcome to the Brain Games!');
   const name = await promptly.prompt('May I have your name?');
   console.log(`Hello, ${name}!`);
-  console.log('What is the result of the expression?');
+  console.log('What number is missing in the progression?');
 
   const startQuestions = () => {
     const startRounds = async (currentRounds) => {
       if (!currentRounds) {
         return console.log(`Congratulations, ${name}!`);
       }
-      const randomNumber1 = getRandomNumber(1, 10);
-      const randomNumber2 = getRandomNumber(1, 10);
-      const randomOperator = getRandomOperator();
-      const realAnswer = getAnswers(randomNumber1, randomOperator, randomNumber2);
-
-      console.log(`Question: ${randomNumber1} ${randomOperator} ${randomNumber2}`);
+      const newProgression = getProgression();
+      const realAnswer = randomHiddenNumber;
+      console.log(`Question: ${hideNumber(newProgression)}`);
       const userAnswer = await promptly.prompt('Your answer:');
       if (userAnswer === realAnswer.toString()) {
         console.log('Correct!');

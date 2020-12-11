@@ -4,34 +4,33 @@ const rounds = 3;
 
 const getRandomNumber = (start, end) => start + Math.floor((end - start) * Math.random());
 
-const getlargestDivisor = (number1, number2) => {
-  if (!number2) {
-    return number1;
+const isPrime = (num) => {
+  if (num === 1) {
+    return 'no';
   }
-  return getlargestDivisor(number2, number1 % number2);
+  for (let i = 2; i < num; i += 1) if (num % i === 0) return 'no';
+  return 'yes';
 };
 
 export default async function startGame() {
   console.log('Welcome to the Brain Games!');
   const name = await promptly.prompt('May I have your name?');
   console.log(`Hello, ${name}!`);
-  console.log('Find the greatest common divisor of given numbers.');
+  console.log('Answer "yes" if given number is prime. Otherwise answer "no".');
 
   const startQuestions = () => {
     const startRounds = async (currentRounds) => {
       if (!currentRounds) {
         return console.log(`Congratulations, ${name}!`);
       }
-      const randomNumber1 = getRandomNumber(1, 100);
-      const randomNumber2 = getRandomNumber(1, 100);
-      const realAnswer = getlargestDivisor(randomNumber1, randomNumber2);
-      console.log(`Question: ${randomNumber1} ${randomNumber2}`);
+      const randomNumber = getRandomNumber(1, 100);
+      console.log(`Question: ${randomNumber}`);
       const userAnswer = await promptly.prompt('Your answer:');
-      if (userAnswer === realAnswer.toString()) {
+      if (isPrime(randomNumber) === userAnswer) {
         console.log('Correct!');
       } else {
         console.log(`'${userAnswer}' is wrong answer ;(.`);
-        return console.log(`Correct answer was '${realAnswer}'. Let's try again, ${name}!`);
+        return console.log(`Correct answer was '${isPrime(randomNumber)}'. Let's try again, ${name}!`);
       }
       return startRounds(currentRounds - 1);
     };
