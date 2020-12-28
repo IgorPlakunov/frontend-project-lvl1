@@ -1,7 +1,5 @@
-import promptly from 'promptly';
-
-const rounds = 3;
-const getRandomNumber = (start, end) => start + Math.floor((end - start) * Math.random());
+import startGame from './index.js';
+import getRandomNumber from './number-generator.js';
 
 const randomNumber = getRandomNumber(1, 100);
 const randomProgressNumber = getRandomNumber(2, 10);
@@ -25,30 +23,14 @@ const hideNumber = (array) => {
   return array.join(' ');
 };
 
-export default async function startGame() {
-  console.log('Welcome to the Brain Games!');
-  const name = await promptly.prompt('May I have your name?');
-  console.log(`Hello, ${name}!`);
-  console.log('What number is missing in the progression?');
+const getGameProps = () => {
+  const question = hideNumber(getProgression());
+  const answer = randomHiddenNumber;
+  return { question, answer };
+};
 
-  const startQuestions = () => {
-    const startRounds = async (currentRounds) => {
-      if (!currentRounds) {
-        return console.log(`Congratulations, ${name}!`);
-      }
-      const newProgression = getProgression();
-      const realAnswer = randomHiddenNumber;
-      console.log(`Question: ${hideNumber(newProgression)}`);
-      const userAnswer = await promptly.prompt('Your answer:');
-      if (userAnswer === realAnswer.toString()) {
-        console.log('Correct!');
-      } else {
-        console.log(`'${userAnswer}' is wrong answer ;(.`);
-        return console.log(`Correct answer was '${realAnswer}'. Let's try again, ${name}!`);
-      }
-      return startRounds(currentRounds - 1);
-    };
-    startRounds(rounds);
-  };
-  startQuestions();
-}
+const description = 'What number is missing in the progression?';
+
+const beginGame = () => startGame(description, getGameProps);
+
+export default beginGame;
